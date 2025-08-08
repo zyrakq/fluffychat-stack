@@ -1,0 +1,5 @@
+services:   
+  fluffychat:
+    image: ghcr.io/krille-chan/fluffychat:latest
+    container_name: fluffychat
+    restart: unless-stopped

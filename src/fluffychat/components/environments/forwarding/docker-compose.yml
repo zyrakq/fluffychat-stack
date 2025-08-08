@@ -1,0 +1,4 @@
+services:
+  fluffychat:
+    ports:
+      - "3000:80"
