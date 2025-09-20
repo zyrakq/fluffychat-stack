@@ -2,50 +2,17 @@
 
 A modular Docker Compose configuration system for FluffyChat client with support for multiple environments. FluffyChat is a simple and modern Matrix client that provides a clean alternative to Element with fewer dependencies and a streamlined user experience.
 
-## 🏗️ Project Structure
-
-```sh
-src/fluffychat/
-├── components/                              # Source compose components
-│   ├── base/                               # Base components
-│   │   ├── docker-compose.yml              # Main FluffyChat service
-│   │   └── .env.example                    # Base environment variables
-│   ├── environments/                       # Environment components
-│   │   ├── devcontainer/
-│   │   │   └── docker-compose.yml          # DevContainer environment
-│   │   ├── forwarding/
-│   │   │   └── docker-compose.yml          # Development with port forwarding
-│   │   ├── letsencrypt/
-│   │   │   ├── docker-compose.yml          # Let's Encrypt SSL
-│   │   │   └── .env.example                # Let's Encrypt variables
-│   │   └── step-ca/
-│   │       ├── docker-compose.yml          # Step CA SSL
-│   │       └── .env.example                # Step CA variables
-│   └── extensions/                         # Extension components (optional)
-├── build/                        # Generated configurations (auto-generated)
-│   ├── devcontainer/
-│   │   └── base/                 # DevContainer + base
-│   ├── forwarding/
-│   │   └── base/                 # Development + base
-│   ├── letsencrypt/
-│   │   └── base/                 # Let's Encrypt + base
-│   └── step-ca/
-│       └── base/                 # Step CA + base
-├── build.sh                      # Build script
-└── README.md                     # This file
-```
-
 ## 🚀 Quick Start
 
 ### 1. Build Configurations
 
-Run the build script to generate all possible combinations:
+Use the stackbuilder utility to generate all configurations:
 
 ```bash
-./build.sh
+sb build
 ```
 
-This will create all combinations in the `build/` directory.
+This creates ready-to-deploy Docker Compose files in the `build/` directory.
 
 ### 2. Choose Your Configuration
 
@@ -55,7 +22,7 @@ Navigate to the desired configuration directory:
 # For development with port forwarding
 cd build/forwarding/base/
 
-# For DevContainer environment
+# For DevContainer environment  
 cd build/devcontainer/base/
 
 # For production with Let's Encrypt SSL
@@ -79,30 +46,17 @@ cp .env.example .env
 Start the services:
 
 ```bash
-docker-compose up -d
+docker compose up --build -d
 ```
 
 Access: `http://localhost:3000` (for forwarding mode)
 
-## 🔧 Available Configurations
-
-### Environments
+## 🔧 Available Environments
 
 - **devcontainer**: Development environment with workspace network
 - **forwarding**: Development environment with port forwarding (3000:80)
 - **letsencrypt**: Production with Let's Encrypt SSL certificates
 - **step-ca**: Production with Step CA SSL certificates
-
-### Generated Combinations
-
-Each environment provides a complete FluffyChat deployment:
-
-**Base configurations:**
-
-- `devcontainer/base` - DevContainer development setup
-- `forwarding/base` - Development with port forwarding
-- `letsencrypt/base` - Production with Let's Encrypt SSL
-- `step-ca/base` - Production with Step CA SSL
 
 ## 🔧 Environment Variables
 
@@ -123,34 +77,6 @@ Each environment provides a complete FluffyChat deployment:
 - `VIRTUAL_HOST`: Domain for nginx-proxy (e.g., fluffychat.local)
 - `LETSENCRYPT_HOST`: Domain for SSL certificate
 - `LETSENCRYPT_EMAIL`: Email for certificate registration
-
-## 🛠️ Development
-
-### Adding New Environments
-
-1. Create directory in `components/environments/` with `docker-compose.yml` and optional `.env.example` file
-2. Run `./build.sh` to generate new combinations
-
-### Adding New Extensions
-
-1. Create directory in `components/extensions/` with `docker-compose.yml` and optional `.env.example` file
-2. Run `./build.sh` to generate new combinations with all environments
-3. Extensions are automatically combined with all available environments
-
-### File Naming Convention
-
-All component files follow the standard Docker Compose naming convention (`docker-compose.yml`) for:
-
-- **VS Code compatibility**: Full support for Docker Compose language features and IntelliSense
-- **IDE integration**: Proper syntax highlighting and validation in all major editors
-- **Tool compatibility**: Works with Docker Compose plugins and extensions
-- **Standard compliance**: Follows official Docker Compose file naming patterns
-
-### Modifying Existing Components
-
-1. Edit the component files in `components/`
-2. Run `./build.sh` to regenerate configurations
-3. The `build/` directory will be completely recreated
 
 ## 🌐 Networks
 
@@ -174,7 +100,7 @@ All component files follow the standard Docker Compose naming convention (`docke
 
 **Build Issues:**
 
-- Ensure `yq` is installed: <https://github.com/mikefarah/yq#install>
+- Ensure `sb` (stackbuilder) is installed: <https://github.com/zyrakq/stackbuilder>
 - Check component file syntax
 - Verify all required files exist
 
@@ -198,30 +124,11 @@ All component files follow the standard Docker Compose naming convention (`docke
 
 ## 📝 Notes
 
-- The `build/` directory is automatically generated and should not be edited manually
+- The `build/` directory contains auto-generated Docker Compose configurations
 - Environment variables in generated files use `$VARIABLE_NAME` format for proper interpolation
 - Each generated configuration includes a complete `docker-compose.yml` and `.env.example`
-- Missing `.env.*` files for components are handled gracefully by the build script
 - FluffyChat requires proper Matrix homeserver configuration for functionality
-
-## 🔄 Configuration Management
-
-The build system automatically:
-
-- Merges base and environment configurations
-- Copies additional files and configurations
-- Generates complete deployment configurations
-- Preserves user `.env` files during rebuilds
-
-**Build approach:**
-
-```bash
-./build.sh
-cd build/forwarding/base/
-cp .env.example .env
-# Edit .env with your values
-docker-compose up -d
-```
+- Source components are in the `components/` directory and are built into final configurations using `sb build`
 
 ## 🎨 FluffyChat Features
 
