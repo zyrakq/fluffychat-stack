@@ -22,9 +22,6 @@ Navigate to the desired configuration directory:
 # For development with port forwarding
 cd build/forwarding/base/
 
-# For DevContainer environment  
-cd build/devcontainer/base/
-
 # For production with Let's Encrypt SSL
 cd build/letsencrypt/base/
 
@@ -53,7 +50,6 @@ Access: `http://localhost:3000` (for forwarding mode)
 
 ## 🔧 Available Environments
 
-- **devcontainer**: Development environment with workspace network
 - **forwarding**: Development environment with port forwarding (3000:80)
 - **letsencrypt**: Production with Let's Encrypt SSL certificates
 - **step-ca**: Production with Step CA SSL certificates

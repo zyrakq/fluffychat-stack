@@ -1,8 +1,0 @@
-services:
-  fluffychat:
-    networks:
-      - fluffychat-workspace-network
-
-networks:
-  fluffychat-workspace-network:
-    external: true
